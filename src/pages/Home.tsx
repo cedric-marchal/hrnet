@@ -2,11 +2,11 @@ import { FormEvent, useState } from "react";
 import { DatePicker } from "../plugins/DatePicker";
 import { Modal } from "../plugins/Modal";
 import { SelectMenu } from "../plugins/SelectMenu";
-import { useBearStore } from "../store/useBearStore";
+
+import { useEmployeeStore } from "../store/useEmployeeStore";
 
 export const Home = () => {
-  const { bears, increasePopulation } = useBearStore();
-
+  const { addNewEmployee } = useEmployeeStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const options = [
@@ -22,17 +22,54 @@ export const Home = () => {
 
     const formData = new FormData(event.currentTarget);
     console.log(formData);
+
+    const employee = {
+      id: "1",
+      firstName: formData.get("firstName") as string,
+      lastName: formData.get("lastName") as string,
+      dateOfBirth: formData.get("dateOfBirth") as string,
+      startDate: formData.get("startDate") as string,
+      department: formData.get("department") as string,
+    };
+
+    addNewEmployee(employee);
   };
 
   return (
-    <main className="flex flex-col items-center justify-center w-full h-screen gap-14">
+    <main className="flex flex-col items-center justify-center w-full min-h-screen gap-14">
       <div>
-        <p>Il y a {bears} ours.</p>
-        <button onClick={increasePopulation}>Incrémenter</button>
+        <h1 className="text-xl">Create Employee</h1>
       </div>
+
       <div>
         <form action="post" onSubmit={onSubmit} className="flex flex-col gap-8">
-          <DatePicker name="date" label="Date" />
+          <div className="flex gap-8">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                id="firstName"
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                className="p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                className="p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+          </div>
+
+          <DatePicker name="dateOfBirth" label="Date Of Birth" />
+          <DatePicker name="startDate" label="Start Date" />
+
           <SelectMenu options={options} />
 
           <button
