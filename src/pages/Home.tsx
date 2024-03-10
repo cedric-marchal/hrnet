@@ -6,7 +6,7 @@ import { SelectMenu } from "../plugins/SelectMenu";
 import { useEmployeeStore } from "../store/useEmployeeStore";
 
 export const Home = () => {
-  const { addNewEmployee } = useEmployeeStore();
+  const { employees, addNewEmployee } = useEmployeeStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const options = [
@@ -21,10 +21,9 @@ export const Home = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    console.log(formData);
 
     const employee = {
-      id: "1",
+      id: employees.length + 1,
       firstName: formData.get("firstName") as string,
       lastName: formData.get("lastName") as string,
       dateOfBirth: formData.get("dateOfBirth") as string,
