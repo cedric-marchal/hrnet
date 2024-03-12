@@ -1,26 +1,30 @@
-import { FormEvent, useState } from "react";
-import { DatePicker } from "../plugins/DatePicker";
+import { FormEvent, useEffect, useState } from "react";
 import { Modal } from "../plugins/Modal";
-import { SelectMenu } from "../plugins/SelectMenu";
 
 import { useEmployeeStore } from "../store/useEmployeeStore";
 
 export const Home = () => {
   const { employees, addNewEmployee } = useEmployeeStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const options = [
-    { label: "Sales", value: "sales" },
-    { label: "Marketing", value: "marketing" },
-    { label: "Engineering", value: "engineering" },
-    { label: "Human Resources", value: "human-resources" },
-    { label: "Legal", value: "legal" },
-  ];
+  const [modalMessage, setModalMessage] = useState("");
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
+
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "dateOfBirth",
+      "startDate",
+      "department",
+    ];
+
+    if (!requiredFields.every((field) => formData.get(field))) {
+      setModalMessage("A required field is missing or invalid.");
+      return setIsModalOpen(true);
+    }
 
     const employee = {
       id: employees.length + 1,
@@ -32,15 +36,23 @@ export const Home = () => {
     };
 
     addNewEmployee(employee);
+
+    setModalMessage("Successfully created new employee");
+    setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setModalMessage("");
+    }
+  }, [isModalOpen]);
 
   return (
     <main className="flex flex-col items-center justify-center w-full min-h-screen gap-14">
-      <div>
-        <h1 className="text-xl">Create Employee</h1>
-      </div>
-
-      <div>
+      <div className="flex flex-col gap-8 p-8 shadow-md">
+        <div>
+          <h1 className="text-xl">Create Employee</h1>
+        </div>
         <form action="post" onSubmit={onSubmit} className="flex flex-col gap-8">
           <div className="flex gap-8">
             <div className="flex flex-col gap-2">
@@ -66,10 +78,42 @@ export const Home = () => {
             </div>
           </div>
 
-          <DatePicker name="dateOfBirth" label="Date Of Birth" />
-          <DatePicker name="startDate" label="Start Date" />
+          <div className="flex flex-col gap-2">
+            <label htmlFor="dateOfBirth" className="text-gray-700">
+              Date Of Birth
+            </label>
+            <input
+              type="date"
+              name="dateOfBirth"
+              id="dateOfBirth"
+              className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
 
-          <SelectMenu options={options} />
+          <div className="flex flex-col gap-2">
+            <label htmlFor="startDate" className="text-gray-700">
+              Start Date
+            </label>
+            <input
+              type="date"
+              name="startDate"
+              id="startDate"
+              className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <select
+              name="department"
+              className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="sales">Sales</option>
+              <option value="marketing">Marketing</option>
+              <option value="engineeringr">Engineering</option>
+              <option value="human-resources">Human Resourcest</option>
+              <option value="legal">Legal</option>
+            </select>
+          </div>
 
           <button
             type="submit"
@@ -82,15 +126,11 @@ export const Home = () => {
 
       <div>
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <div>Ceci est le contenu de la modal</div>
+          <div>{modalMessage}</div>
         </Modal>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-        >
-          Open Modal
-        </button>
       </div>
     </main>
   );
 };
+
+// l'utilisateur a é
