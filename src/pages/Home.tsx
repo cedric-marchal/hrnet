@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Modal } from "../plugins/Modal";
+import { Modal } from "../plugin/Modal";
 
 import { useEmployeeStore } from "../store/useEmployeeStore";
 
@@ -132,5 +132,3 @@ export const Home = () => {
     </main>
   );
 };
-
-// l'utilisateur a é
