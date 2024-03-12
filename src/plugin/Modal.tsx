@@ -11,7 +11,6 @@ export const Modal = ({
   onClose,
   children,
 }: PropsWithChildren<ModalProps>) => {
-  // Gérer le verrouillage du défilement du fond lors de l'affichage de la modal
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -29,10 +28,7 @@ export const Modal = ({
       className="fixed inset-0 z-50 flex overflow-auto bg-gray-400 "
       onClick={onClose}
     >
-      <div
-        className="relative flex items-center justify-between w-full max-w-md m-auto bg-white rounded-lg p-14"
-        onClick={(e) => e.stopPropagation()} // Empêche le clic de se propager au div parent et de fermer la modal
-      >
+      <div className="relative flex items-center justify-between w-full max-w-md m-auto bg-white rounded-lg p-14">
         {children}
 
         <span className="p-4 cursor-pointer" onClick={onClose}>
