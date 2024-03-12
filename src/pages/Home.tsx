@@ -102,8 +102,12 @@ export const Home = () => {
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="department" className="text-gray-700">
+              Department
+            </label>
             <select
+              id="department"
               name="department"
               className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
